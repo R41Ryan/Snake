@@ -16,6 +16,9 @@
     <Filter Include="Header Files\ui">
       <UniqueIdentifier>{4f9a8e7d-5aeb-462a-bc28-fd2492bd8e5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{8ae67c4a-2177-4970-a198-c8e77dc5f067}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataStructures.h">
@@ -46,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="ui\buttonUI.h">
       <Filter>Header Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\buttonUI.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

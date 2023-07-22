@@ -29,6 +29,7 @@
     <ClCompile Include="snake\apple.cpp" />
     <ClCompile Include="snake\snake.cpp" />
     <ClCompile Include="snake\snakeGame.cpp" />
+    <ClCompile Include="ui\buttonUI.cpp" />
     <ClCompile Include="ui\buttonUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

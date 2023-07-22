@@ -15,3 +15,20 @@ struct Coordinates {
 		return false;
 	};
 };
+
+template
+<typename T>
+struct Vector2D {
+	T a, b;
+
+	Vector2D(int a = 0, int b = 0) {
+		this->a = a;
+		this->b = b;
+	}
+
+	bool operator ==(const Vector2D<int>& v) {
+		if (a == v.a && b == v.b)
+			return true;
+		return false;
+	};
+};

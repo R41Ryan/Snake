@@ -9,6 +9,14 @@
 
 #define FPS 60
 
+enum gameStates
+{
+	MAIN_MENU,
+	IN_GAME,
+	QUITTING_GAME,
+	TOTAL_GAME_STATES
+};
+
 const int SCREEN_WIDTH = 700;
 const int SCREEN_HEIGHT = 700;
 
@@ -16,6 +24,7 @@ const int GAME_WIDTH = 40;
 const int GAME_HEIGHT = 40;
 
 int gameFlags;
+int currentState = MAIN_MENU;
 
 Uint32 fps_nextTime = 1000 / 5;
 
@@ -131,6 +140,16 @@ void render()
 	SDL_RenderPresent(gRenderer);
 }
 
+void update()
+{
+	snakeGame->nextFrame(gameFlags);
+
+	if (gameFlags == 1 || gameFlags == 2)
+	{
+		currentState = QUITTING_GAME;
+	}
+}
+
 void capFrameRate()
 {
 	while (SDL_GetTicks() < fps_nextTime) {}
@@ -157,7 +176,7 @@ int main(int argc, char* args[])
 			{
 				switch (e.type) {
 				case SDL_QUIT:
-					quit = false;
+					currentState = QUITTING_GAME;
 					break;
 				case SDL_KEYDOWN:
 					switch (e.key.keysym.sym)
@@ -179,16 +198,16 @@ int main(int argc, char* args[])
 				}
 			}
 
-			snakeGame->nextFrame(gameFlags);
+			update();
 
 			render();
 
-			if (gameFlags == 1 || gameFlags == 2)
+			capFrameRate();
+
+			if (currentState == QUITTING_GAME)
 			{
 				quit = false;
 			}
-
-			capFrameRate();
 		}
 	}
 
