@@ -18,7 +18,8 @@ struct Coordinates {
 
 template
 <typename T>
-struct Vector2D {
+struct Vector2D 
+{
 	T a, b;
 
 	Vector2D(int a = 0, int b = 0) {
@@ -28,6 +29,25 @@ struct Vector2D {
 
 	bool operator ==(const Vector2D<int>& v) {
 		if (a == v.a && b == v.b)
+			return true;
+		return false;
+	};
+};
+
+template
+<typename T>
+struct Vector3D 
+{
+	T a, b, c;
+
+	Vector3D(int a = 0, int b = 0, int c = 0) {
+		this->a = a;
+		this->b = b;
+		this->c = c;
+	}
+
+	bool operator ==(const Vector2D<int>& v) {
+		if (a == v.a && b == v.b && c = v.c)
 			return true;
 		return false;
 	};
