@@ -23,6 +23,7 @@ public:
 	~ButtonUI();
 
 	void render(SDL_Renderer* renderer);
+	bool isIn(Coordinates pos);
 
 	Coordinates getPosition() { return position; };
 	std::string getText() { return text; };

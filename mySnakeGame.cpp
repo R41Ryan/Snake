@@ -37,6 +37,7 @@ void close();
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
+Coordinates mousePos;
 
 SnakeGame* snakeGame;
 int gameScore;
@@ -131,7 +132,6 @@ void renderText(int x, int y, const char* string, int fontSize, const char* font
 void renderUI()
 {
 	renderText(0, 0, std::to_string(snakeGame->getScore()).c_str(), 24, "Arial.ttf");
-	testButton->render(gRenderer);
 }
 
 void render()
@@ -139,18 +139,31 @@ void render()
 	// std::cout << "Rendering iteration " << bestIteration << std::endl;
 	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xff);
 	SDL_RenderClear(gRenderer);
-	snakeGame->render(gRenderer);
-	renderUI();
+
+	switch (currentState)
+	{
+	case MAIN_MENU:
+		testButton->render(gRenderer);
+		break;
+	case IN_GAME:
+		snakeGame->render(gRenderer);
+		renderUI();
+		break;
+	default:
+		break;
+	}
 	SDL_RenderPresent(gRenderer);
 }
 
 void update()
 {
-	snakeGame->nextFrame(gameFlags);
+	switch (currentState) {
+		snakeGame->nextFrame(gameFlags);
 
-	if (gameFlags == 1 || gameFlags == 2)
-	{
-		currentState = QUITTING_GAME;
+		if (gameFlags == 1 || gameFlags == 2)
+		{
+			currentState = QUITTING_GAME;
+		}
 	}
 }
 
@@ -175,10 +188,11 @@ int main(int argc, char* args[])
 
 		while (quit)
 		{
-			SDL_Delay(50);
+			SDL_GetMouseState(&mousePos.x, &mousePos.y);
 			while (SDL_PollEvent(&e) > 0)
 			{
-				switch (e.type) {
+				switch (e.type)
+				{
 				case SDL_QUIT:
 					currentState = QUITTING_GAME;
 					break;
@@ -196,6 +210,17 @@ int main(int argc, char* args[])
 						break;
 					case SDLK_s:
 						snakeGame->setSnakeDirection(DOWN);
+						break;
+					}
+					break;
+				case SDL_MOUSEBUTTONUP:
+					switch (e.button.button)
+					{
+					case SDL_BUTTON_LEFT:
+						if (testButton->isIn(mousePos))
+						{
+							std::cout << "Button Clicked" << std::endl;
+						}
 						break;
 					}
 					break;

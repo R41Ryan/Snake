@@ -61,3 +61,18 @@ void ButtonUI::render(SDL_Renderer* renderer)
 	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(texture);
 }
+
+bool ButtonUI::isIn(Coordinates pos)
+{
+	int leftBoundary = position.x - size.a / 2;
+	int rightBoundary = position.x + size.a / 2;
+	int topBoundary = position.y - size.b / 2;
+	int bottomBoundary = position.y + size.b / 2;
+
+	if (pos.x < leftBoundary || pos.x > rightBoundary || pos.y < topBoundary || pos.y > bottomBoundary)
+	{
+		return false;
+	}
+
+	return true;
+}
