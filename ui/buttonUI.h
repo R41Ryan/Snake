@@ -20,6 +20,7 @@ public:
 	ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fontFileName, 
 		int fs = 10, Vector3D<int> tc = Vector3D<int>(0, 0, 0), Vector3D<int> oc = Vector3D<int>(0xff, 0xff, 0xff),
 		Vector3D<int> bc = Vector3D<int>(0xff, 0xff, 0xff), bool f = true);
+	~ButtonUI();
 
 	void render(SDL_Renderer* renderer);
 

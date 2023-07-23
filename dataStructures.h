@@ -46,7 +46,7 @@ struct Vector3D
 		this->c = c;
 	}
 
-	bool operator ==(const Vector2D<int>& v) {
+	bool operator ==(const Vector3D<int>& v) {
 		if (a == v.a && b == v.b && c = v.c)
 			return true;
 		return false;

@@ -6,6 +6,7 @@
 #include <SDL_thread.h>
 #include <string>
 #include "snake/snakeGame.h"
+#include "ui/ui.h"
 
 #define FPS 60
 
@@ -28,8 +29,6 @@ int currentState = MAIN_MENU;
 
 Uint32 fps_nextTime = 1000 / 5;
 
-enum buttonStates { MOUSE_DOWN, MOUSE_UP };
-
 // Initializes SDL
 bool init();
 
@@ -41,6 +40,8 @@ SDL_Renderer* gRenderer = NULL;
 
 SnakeGame* snakeGame;
 int gameScore;
+
+ButtonUI* testButton;
 
 bool init()
 {
@@ -79,6 +80,8 @@ bool init()
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0, 0, 0xFF);
 
 	snakeGame = new SnakeGame(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
+
+	testButton = new ButtonUI(Coordinates(250, 250), "Test Button LALALA", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	return true;
 }
 
@@ -128,6 +131,7 @@ void renderText(int x, int y, const char* string, int fontSize, const char* font
 void renderUI()
 {
 	renderText(0, 0, std::to_string(snakeGame->getScore()).c_str(), 24, "Arial.ttf");
+	testButton->render(gRenderer);
 }
 
 void render()

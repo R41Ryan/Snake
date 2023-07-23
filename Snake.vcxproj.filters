@@ -33,6 +33,9 @@
     <ClInclude Include="snake\snakeGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ui\ui.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="snake\apple.cpp">

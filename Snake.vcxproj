@@ -23,6 +23,7 @@
     <ClInclude Include="snake\apple.h" />
     <ClInclude Include="snake\snake.h" />
     <ClInclude Include="snake\snakeGame.h" />
+    <ClInclude Include="ui\ui.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mySnakeGame.cpp" />
