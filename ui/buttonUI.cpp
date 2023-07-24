@@ -20,11 +20,17 @@ ButtonUI::ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fo
 	highlightColour = hc;
 	filled = f;
 	hovered = false;
+	playing = -1;
 }
 
 ButtonUI::~ButtonUI()
 {
 	TTF_CloseFont(font);
+	for (int i = 0; i < MAX_SOUNDS; i++)
+	{
+		if (sounds[i] != nullptr)
+			Mix_FreeChunk(sounds[i]);
+	}
 }
 
 void ButtonUI::render(SDL_Renderer* renderer)
@@ -88,17 +94,65 @@ bool ButtonUI::isIn(Coordinates pos)
 
 void ButtonUI::update(Coordinates mousePos)
 {
-	checkHover(mousePos);
+	bool changedHoverdState = checkHover(mousePos);
+	if (changedHoverdState)
+	{
+		playSound(0);
+	}
+
+	if (playing >= 0)
+	{
+		Mix_PlayChannel(-1, sounds[playing], 0);
+		playing = -1;
+	}
 }
 
-void ButtonUI::checkHover(Coordinates mousePos)
+bool ButtonUI::checkHover(Coordinates mousePos)
 {
+	bool changedState = false;
 	if (isIn(mousePos))
 	{
+		if (hovered == false)
+			changedState = true;
 		hovered = true;
 	}
 	else
 	{
+		if (hovered == true)
+			changedState = true;
 		hovered = false;
 	}
+	return changedState;
+}
+
+void ButtonUI::loadSound(const char* sound, int index)
+{
+	if (index < 0 || index >= MAX_SOUNDS)
+	{
+		std::cout << "Error loading sound: index is out of bounds.\n";
+		return;
+	}
+	if (sounds[index] != nullptr)
+		Mix_FreeChunk(sounds[index]);
+	sounds[index] = Mix_LoadWAV(sound);
+	if (sounds[index] == nullptr)
+	{
+		std::cout << "Error loading sound: Invalid file path.\n";
+	}
+}
+
+void ButtonUI::playSound(int index)
+{
+	if (index < 0 || index >= MAX_SOUNDS)
+	{
+		std::cout << "Error playing sound: index is out of bounds.\n";
+		return;
+	}
+	if (sounds[index] == nullptr)
+	{
+		std::cout << "Error playing sound: sound index is null.\n";
+		return;
+	}
+	if (sounds[index] != nullptr && playing < 0)
+		playing = index;
 }
