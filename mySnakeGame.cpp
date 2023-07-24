@@ -3,17 +3,19 @@
 #include <fstream>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <SDL_thread.h>
+#include <SDL_mixer.h>
 #include <string>
 #include "snake/snakeGame.h"
 #include "ui/ui.h"
 
-#define FPS 60
+#define FPS 20
 
 enum gameStates
 {
 	MAIN_MENU,
 	IN_GAME,
+	GAME_WIN,
+	GAME_LOSS,
 	QUITTING_GAME,
 	TOTAL_GAME_STATES
 };
@@ -42,11 +44,13 @@ Coordinates mousePos;
 SnakeGame* snakeGame;
 int gameScore;
 
-ButtonUI* testButton;
+ButtonUI* startButton;
+
+Mix_Chunk* testSound;
 
 bool init()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		std::cout << "SDL failed to initialize. SDL ERROR: " << SDL_GetError() << std::endl;
 		return false;
@@ -78,11 +82,19 @@ bool init()
 		return false;
 	}
 
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+	{
+		std::cout << "Failed to initialize mixer." << std::endl;
+		return false;
+	}
+
+	testSound = Mix_LoadWAV("audio\\forward.wav");
+
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0, 0, 0xFF);
 
 	snakeGame = new SnakeGame(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
 
-	testButton = new ButtonUI(Coordinates(250, 250), "Test Button LALALA", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	startButton = new ButtonUI(Coordinates(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), "Start Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	return true;
 }
 
@@ -143,7 +155,7 @@ void render()
 	switch (currentState)
 	{
 	case MAIN_MENU:
-		testButton->render(gRenderer);
+		startButton->render(gRenderer);
 		break;
 	case IN_GAME:
 		snakeGame->render(gRenderer);
@@ -157,13 +169,24 @@ void render()
 
 void update()
 {
-	switch (currentState) {
+	switch (currentState) 
+	{
+	case MAIN_MENU:
+		startButton->update(mousePos);
+		break;
+	case IN_GAME:
 		snakeGame->nextFrame(gameFlags);
 
-		if (gameFlags == 1 || gameFlags == 2)
+		switch (gameFlags)
 		{
-			currentState = QUITTING_GAME;
+		case 1:
+			currentState = GAME_LOSS;
+			break;
+		case 2:
+			currentState = GAME_WIN;
+			break;
 		}
+		break;
 	}
 }
 
@@ -211,15 +234,18 @@ int main(int argc, char* args[])
 					case SDLK_s:
 						snakeGame->setSnakeDirection(DOWN);
 						break;
+					case SDLK_f:
+						Mix_PlayChannel(-1, testSound, 0);
+						break;
 					}
 					break;
 				case SDL_MOUSEBUTTONUP:
 					switch (e.button.button)
 					{
 					case SDL_BUTTON_LEFT:
-						if (testButton->isIn(mousePos))
+						if (startButton->isIn(mousePos))
 						{
-							std::cout << "Button Clicked" << std::endl;
+							currentState = IN_GAME;
 						}
 						break;
 					}

@@ -2,7 +2,7 @@
 #include <iostream>
 
 ButtonUI::ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fontFileName, int fs, 
-	Vector3D<int> tc, Vector3D<int> oc, Vector3D<int> bc, bool f)
+	Vector3D<int> tc, Vector3D<int> oc, Vector3D<int> bc, Vector3D<int> hc, bool f)
 {
 	position = p;
 	text = t;
@@ -17,7 +17,9 @@ ButtonUI::ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fo
 	textColour = tc;
 	outlineColour = oc;
 	boxColour = bc;
+	highlightColour = hc;
 	filled = f;
+	hovered = false;
 }
 
 ButtonUI::~ButtonUI()
@@ -30,7 +32,14 @@ void ButtonUI::render(SDL_Renderer* renderer)
 	SDL_Rect boxRect{ position.x - size.a / 2, position.y - size.b / 2, size.a, size.b };
 	// Render box
 	if (filled) {
-		SDL_SetRenderDrawColor(renderer, boxColour.a, boxColour.b, boxColour.c, 0xff);
+		if (hovered)
+		{
+			SDL_SetRenderDrawColor(renderer, highlightColour.a, highlightColour.b, highlightColour.c, 0xff);
+		}
+		else
+		{
+			SDL_SetRenderDrawColor(renderer, boxColour.a, boxColour.b, boxColour.c, 0xff);
+		}
 		SDL_RenderFillRect(renderer, &boxRect);
 	}
 
@@ -75,4 +84,21 @@ bool ButtonUI::isIn(Coordinates pos)
 	}
 
 	return true;
+}
+
+void ButtonUI::update(Coordinates mousePos)
+{
+	checkHover(mousePos);
+}
+
+void ButtonUI::checkHover(Coordinates mousePos)
+{
+	if (isIn(mousePos))
+	{
+		hovered = true;
+	}
+	else
+	{
+		hovered = false;
+	}
 }
