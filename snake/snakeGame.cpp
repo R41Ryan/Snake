@@ -72,9 +72,9 @@ void SnakeGame::nextFrame(int& flags)
 
 	snakePlayer->move();
 
-	if (snakePlayer->getHead().x >= width || snakePlayer->getHead().x < 0)
+	if (snakePlayer->getHead().x > width || snakePlayer->getHead().x < 0)
 		flags = 1;
-	if (snakePlayer->getHead().y >= height || snakePlayer->getHead().y < 0)
+	if (snakePlayer->getHead().y > height || snakePlayer->getHead().y < 0)
 		flags = 1;
 	if (snakePlayer->checkSnakeCollision())
 		flags = 1;

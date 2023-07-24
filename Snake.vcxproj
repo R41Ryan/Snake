@@ -26,6 +26,8 @@
     <ClInclude Include="ui\ui.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="control\audioManager.cpp" />
+    <ClCompile Include="control\audioManager.h" />
     <ClCompile Include="mySnakeGame.cpp" />
     <ClCompile Include="snake\apple.cpp" />
     <ClCompile Include="snake\snake.cpp" />

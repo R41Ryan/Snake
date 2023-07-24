@@ -4,9 +4,8 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <dataStructures.h>
+#include <control/audioManager.h>
 #include <string>
-
-#define MAX_SOUNDS 10
 
 class ButtonUI {
 	Coordinates position;
@@ -21,10 +20,7 @@ class ButtonUI {
 	bool filled;
 	bool hovered;
 	
-	// Flag to control music; -1 indicates no sound to be played. 0 or greater indicates a which sounds in the sounds array needs to be played
-	int playing;
-	// Collection of sounds this button AI can play. Control using playSound.
-	Mix_Chunk* sounds[MAX_SOUNDS];
+	AudioManager* audio;
 
 public:
 	ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fontFileName, 
@@ -38,8 +34,6 @@ public:
 	// Checks if the mouse coordinates hover over the mouse and changes hovered as appropriate.
 	// Returns a bool for if there was a change of state in hovered.
 	bool checkHover(Coordinates mousePos);
-	void loadSound(const char* sound, int index);
-	void playSound(int index);
 
 	Coordinates getPosition() { return position; };
 	std::string getText() { return text; };
@@ -52,7 +46,7 @@ public:
 	Vector3D<int> getHighlightColour() { return highlightColour; };
 	bool isfilled() { return filled; };
 	bool isHovered() { return hovered; };
-	int isPlaying() { return playing; };
+	AudioManager* getAudio() { return audio; };
 
 	void setPosition(Coordinates p) { position = p; };
 	void setText(std::string t) { text = t; };
@@ -65,5 +59,5 @@ public:
 	void setHightlightColour(Vector3D<int> hc) { highlightColour = hc; };
 	void setFilled(bool f) { filled = f; };
 	void setHovered(bool h) { hovered = h; };
-	void setPlaying(int p) { playing = p; };
+	void setAudio(AudioManager* a) { audio = a; };
 };

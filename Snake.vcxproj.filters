@@ -19,6 +19,12 @@
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{8ae67c4a-2177-4970-a198-c8e77dc5f067}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\control">
+      <UniqueIdentifier>{d540cb94-063c-4d8b-8e5e-fd60ad5964e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\control">
+      <UniqueIdentifier>{d7bf3e12-1797-49f9-acae-05d26bfa7c71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataStructures.h">
@@ -55,6 +61,12 @@
     </ClCompile>
     <ClCompile Include="ui\buttonUI.cpp">
       <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="control\audioManager.h">
+      <Filter>Header Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="control\audioManager.cpp">
+      <Filter>Source Files\control</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

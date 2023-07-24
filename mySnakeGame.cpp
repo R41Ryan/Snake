@@ -42,7 +42,7 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 Coordinates mousePos;
 
-Mix_Chunk* sounds[GLOBAL_SOUNDS_NUM];
+AudioManager* globalAudio;
 
 SnakeGame* snakeGame;
 int gameScore;
@@ -89,15 +89,16 @@ bool init()
 		return false;
 	}
 
-	sounds[0] = Mix_LoadWAV("audio\\forward.wav");
-	sounds[1] = Mix_LoadWAV("audio\\backward.wav");
+	globalAudio = new AudioManager();
+	globalAudio->loadSound("audio\\forward.wav", 0);
+	globalAudio->loadSound("audio\\backward.wav", 1);
 
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0, 0, 0xFF);
 
 	snakeGame = new SnakeGame(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
 
 	startButton = new ButtonUI(Coordinates(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), "Start Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
-	startButton->loadSound("audio\\hover.wav", 0);
+	startButton->getAudio()->loadSound("audio\\hover.wav", 0);
 	return true;
 }
 
@@ -108,6 +109,10 @@ void close()
 	gRenderer = NULL;
 	gWindow = NULL;
 
+	delete globalAudio;
+
+	Mix_CloseAudio();
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -172,6 +177,7 @@ void render()
 
 void update()
 {
+	globalAudio->update();
 	switch (currentState) 
 	{
 	case MAIN_MENU:
@@ -183,7 +189,7 @@ void update()
 		switch (gameFlags)
 		{
 		case 1:
-			Mix_PlayChannel(-1, sounds[1], 0);
+			globalAudio->playSound(1);
 			currentState = GAME_LOSS;
 			break;
 		case 2:
@@ -239,6 +245,7 @@ int main(int argc, char* args[])
 						snakeGame->setSnakeDirection(DOWN);
 						break;
 					case SDLK_f:
+						globalAudio->playSound(0);
 						break;
 					}
 					break;
@@ -248,7 +255,7 @@ int main(int argc, char* args[])
 					case SDL_BUTTON_LEFT:
 						if (startButton->isIn(mousePos))
 						{
-							Mix_PlayChannel(-1, sounds[0], 0);
+							globalAudio->playSound(0);
 							currentState = IN_GAME;
 						}
 						break;
