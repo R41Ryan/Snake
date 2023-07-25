@@ -7,6 +7,7 @@
 #include <string>
 #include "snake/snakeGame.h"
 #include "ui/ui.h"
+#include "control/control.h"
 
 #define FPS 20
 #define GLOBAL_SOUNDS_NUM 10

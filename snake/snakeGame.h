@@ -4,6 +4,7 @@
 #include "snake.h"
 #include "apple.h"
 #include <math.h>
+#include <control/control.h>
 
 class SnakeGame {
 	int width;
@@ -14,6 +15,8 @@ class SnakeGame {
 	int length;
 	Snake* snakePlayer;
 	Apple* apple;
+
+	AudioManager* audio;
 
 	bool running;
 

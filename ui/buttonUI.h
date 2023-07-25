@@ -4,7 +4,7 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <dataStructures.h>
-#include <control/audioManager.h>
+#include <control/control.h>
 #include <string>
 
 class ButtonUI {

@@ -42,6 +42,9 @@
     <ClInclude Include="ui\ui.h">
       <Filter>Header Files\ui</Filter>
     </ClInclude>
+    <ClInclude Include="control\control.h">
+      <Filter>Header Files\control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="snake\apple.cpp">

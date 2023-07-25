@@ -22,6 +22,10 @@ SnakeGame::SnakeGame(int screenWidth, int screenHeight, int w, int h)
 	score = 0;
 	length = 0;
 
+	audio = new AudioManager();
+	audio->loadSound("audio\\snake_turn.wav", 0);
+	audio->loadSound("audio\\pick_apple.wav", 1);
+
 	running = true;
 }
 
@@ -68,6 +72,7 @@ void SnakeGame::render(SDL_Renderer* renderer)
 
 void SnakeGame::nextFrame(int& flags)
 {
+	audio->update();
 	flags = 0;
 
 	snakePlayer->move();
@@ -80,6 +85,7 @@ void SnakeGame::nextFrame(int& flags)
 		flags = 1;
 
 	if (snakePlayer->getHead() == apple->getLocation()) {
+		audio->playSound(1);
 		snakePlayer->addBody(width, height);
 		do {
 			apple->newLocation(width, height);
@@ -99,25 +105,40 @@ void SnakeGame::nextFrame(int& flags)
 
 void SnakeGame::setSnakeDirection(int d)
 {
+	bool playSound = true;
 	switch (d)
 	{
 	case RIGHT:
-		if (snakePlayer->getDirection() == LEFT)
+		if (snakePlayer->getDirection() == LEFT) {
+			playSound = false;
 			d = LEFT;
+		}
 		break;
 	case UP:
-		if (snakePlayer->getDirection() == DOWN)
+		if (snakePlayer->getDirection() == DOWN) {
+			playSound = false;
 			d = DOWN;
+		}
 		break;
 	case LEFT:
-		if (snakePlayer->getDirection() == RIGHT)
+		if (snakePlayer->getDirection() == RIGHT) {
+			playSound = false;
 			d = RIGHT;
+		}
 		break;
 	case DOWN:
-		if (snakePlayer->getDirection() == UP)
+		if (snakePlayer->getDirection() == UP) {
+			playSound = false;
 			d = UP;
+		}
 		break;
 	}
+
+	if (snakePlayer->getDirection() == d)
+		playSound = false;
+
+	if (playSound)
+		audio->playSound(0);
 	snakePlayer->setDirection(d);
 }
 

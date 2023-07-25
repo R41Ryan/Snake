@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="control\control.h" />
     <ClInclude Include="dataStructures.h" />
     <ClInclude Include="snake\apple.h" />
     <ClInclude Include="snake\snake.h" />
