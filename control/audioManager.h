@@ -3,6 +3,11 @@
 
 #define MAX_SOUNDS 10
 
+struct AudioEvent {
+	// flag indicating which index in sounds array to play.
+	int index;
+};
+
 class AudioManager {
 	// Flag to control music; -1 indicates no sound to be played. 0 or greater indicates a which sounds in the sounds array needs to be played
 	int playing;
