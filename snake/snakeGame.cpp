@@ -25,6 +25,7 @@ SnakeGame::SnakeGame(int screenWidth, int screenHeight, int w, int h)
 	audio = new AudioManager();
 	audio->loadSound("audio\\snake_turn.wav", 0);
 	audio->loadSound("audio\\pick_apple.wav", 1);
+	audio->loadSound("audio\\milestone.wav", 2);
 
 	running = true;
 }
@@ -73,6 +74,7 @@ void SnakeGame::render(SDL_Renderer* renderer)
 void SnakeGame::nextFrame(int& flags)
 {
 	audio->update();
+
 	flags = 0;
 
 	snakePlayer->move();
@@ -92,6 +94,10 @@ void SnakeGame::nextFrame(int& flags)
 		} while (snakePlayer->checkBodyCoordinates(apple->getLocation()));
 		score ++;
 		length++;
+
+		if (score % 10 == 0) {
+			audio->playSound(2);
+		}
 	}
 
 	if (snakePlayer->getBody().size() == (width * height) - 1)

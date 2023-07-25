@@ -1,5 +1,6 @@
 #pragma
 #include <SDL_mixer.h>
+#include <dataStructures.h>
 
 #define MAX_SOUNDS 10
 
@@ -9,8 +10,7 @@ struct AudioEvent {
 };
 
 class AudioManager {
-	// Flag to control music; -1 indicates no sound to be played. 0 or greater indicates a which sounds in the sounds array needs to be played
-	int playing;
+	LinkedList<AudioEvent> audioQueue;
 	// Collection of sounds this button AI can play. Control using playSound.
 	Mix_Chunk* sounds[MAX_SOUNDS];
 
@@ -22,8 +22,6 @@ public:
 	void loadSound(const char* sound, int index);
 	void playSound(int index);
 
-	int isPlaying() { return playing; };
 	Mix_Chunk* getSound(int index) { return sounds[index]; };
-
-	void setPlaying(int p) { playing = p; };
+	LinkedList<AudioEvent> getAudioQueue() { return audioQueue; };
 };

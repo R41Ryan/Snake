@@ -3,7 +3,6 @@
 
 AudioManager::AudioManager()
 {
-	playing = -1;
 	for (int i = 0; i < MAX_SOUNDS; i++)
 	{
 		sounds[i] = nullptr;
@@ -21,9 +20,8 @@ AudioManager::~AudioManager()
 
 void AudioManager::update()
 {
-	if (playing >= 0) {
-		Mix_PlayChannel(-1, sounds[playing], 0);
-		playing = -1;
+	while (audioQueue.getCount() > 0) {
+		Mix_PlayChannel(-1, sounds[audioQueue.popHead().index], 0);
 	}
 }
 
@@ -56,6 +54,8 @@ void AudioManager::playSound(int index)
 		std::cout << "Error playing sound: sound index is null.\n";
 		return;
 	}
-	if (sounds[index] != nullptr && playing < 0)
-		playing = index;
+	if (sounds[index] != nullptr) {
+		AudioEvent newEvent{ index };
+		audioQueue.addItemToEnd(newEvent);
+	}
 }

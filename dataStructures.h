@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 struct Coordinates {
 	int x;
@@ -58,10 +59,10 @@ template
 class LinkedListItem {
 	T item;
 	LinkedListItem<T>* next;
-	LinkedListItem<T>T* prev;
+	LinkedListItem<T>* prev;
 
 public:
-	LinkedListItem(T i, LinkedListItem<T> n = nullptr, LinkedListItem<T> p = nullptr) {
+	LinkedListItem(T i, LinkedListItem<T>* n = nullptr, LinkedListItem<T>* p = nullptr) {
 		item = i;
 		next = n;
 		prev = p;
@@ -122,10 +123,12 @@ public:
 	}
 	T popHead() {
 		LinkedListItem<T>* toBeRemoved = head;
-		T toBePopped = toBeRemoved.getItem();
+		T toBePopped = toBeRemoved->getItem();
 
 		LinkedListItem<T>* newHead = head->getNext();
-		newHead->setPrev(nullptr);
+		if (newHead != nullptr) {
+			newHead->setPrev(nullptr);
+		}
 		head = newHead;
 
 		delete toBeRemoved;
