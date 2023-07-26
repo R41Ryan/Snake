@@ -30,6 +30,7 @@ const int GAME_HEIGHT = 40;
 
 int gameFlags;
 int currentState = MAIN_MENU;
+bool paused = false;
 
 Uint32 fps_nextTime = 1000 / 5;
 
@@ -170,6 +171,9 @@ void render()
 		snakeGame->render(gRenderer);
 		renderUI();
 		break;
+	case GAME_LOSS:
+		startButton->render(gRenderer);
+		break;
 	default:
 		break;
 	}
@@ -185,18 +189,25 @@ void update()
 		startButton->update(mousePos);
 		break;
 	case IN_GAME:
-		snakeGame->nextFrame(gameFlags);
+		if (!paused) {
+			snakeGame->nextFrame(gameFlags);
 
-		switch (gameFlags)
-		{
-		case 1:
-			globalAudio->playSound(1);
-			currentState = GAME_LOSS;
-			break;
-		case 2:
-			currentState = GAME_WIN;
-			break;
+			switch (gameFlags)
+			{
+			case 1:
+				globalAudio->playSound(1);
+				currentState = GAME_LOSS;
+				startButton->setText("Play Again");
+				startButton->setHovered(false);
+				break;
+			case 2:
+				currentState = GAME_WIN;
+				break;
+			}
 		}
+		break;
+	case GAME_LOSS:
+		startButton->update(mousePos);
 		break;
 	}
 }
@@ -245,8 +256,10 @@ int main(int argc, char* args[])
 					case SDLK_s:
 						snakeGame->setSnakeDirection(DOWN);
 						break;
-					case SDLK_f:
-						globalAudio->playSound(0);
+					case SDLK_ESCAPE:
+						if (currentState == IN_GAME) {
+							paused = paused == false;
+						}
 						break;
 					}
 					break;
@@ -257,6 +270,7 @@ int main(int argc, char* args[])
 						if (startButton->isIn(mousePos))
 						{
 							globalAudio->playSound(0);
+							snakeGame->reset();
 							currentState = IN_GAME;
 						}
 						break;
