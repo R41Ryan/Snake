@@ -24,6 +24,7 @@
     <ClInclude Include="snake\apple.h" />
     <ClInclude Include="snake\snake.h" />
     <ClInclude Include="snake\snakeGame.h" />
+    <ClInclude Include="ui\menu.h" />
     <ClInclude Include="ui\ui.h" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ClCompile Include="snake\snakeGame.cpp" />
     <ClCompile Include="ui\buttonUI.cpp" />
     <ClCompile Include="ui\buttonUI.h" />
+    <ClCompile Include="ui\menu.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

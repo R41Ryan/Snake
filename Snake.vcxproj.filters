@@ -45,6 +45,9 @@
     <ClInclude Include="control\control.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
+    <ClInclude Include="ui\menu.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="snake\apple.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="control\audioManager.cpp">
       <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\menu.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

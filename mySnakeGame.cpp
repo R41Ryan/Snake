@@ -16,8 +16,7 @@ enum gameStates
 {
 	MAIN_MENU,
 	IN_GAME,
-	GAME_WIN,
-	GAME_LOSS,
+	GAME_OVER,
 	QUITTING_GAME,
 	TOTAL_GAME_STATES
 };
@@ -50,6 +49,7 @@ SnakeGame* snakeGame;
 int gameScore;
 
 ButtonUI* startButton;
+Menu* pauseMenu;
 
 bool init()
 {
@@ -94,6 +94,8 @@ bool init()
 	globalAudio = new AudioManager();
 	globalAudio->loadSound("audio\\forward.wav", 0);
 	globalAudio->loadSound("audio\\backward.wav", 1);
+	globalAudio->loadSound("audio\\pause.wav", 2);
+	globalAudio->loadSound("audio\\unpause.wav", 3);
 
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0, 0, 0xFF);
 
@@ -101,6 +103,15 @@ bool init()
 
 	startButton = new ButtonUI(Coordinates(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), "Start Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	startButton->getAudio()->loadSound("audio\\hover.wav", 0);
+
+	pauseMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	ButtonUI* pauseMenuButton = new ButtonUI(Coordinates(), "Resume", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	pauseMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	pauseMenu->addButton(pauseMenuButton);
+	pauseMenuButton = new ButtonUI(Coordinates(), "Return to Menu", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	pauseMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	pauseMenu->addButton(pauseMenuButton);
+
 	return true;
 }
 
@@ -170,8 +181,11 @@ void render()
 	case IN_GAME:
 		snakeGame->render(gRenderer);
 		renderUI();
+		if (paused) {
+			pauseMenu->render(gRenderer);
+		}
 		break;
-	case GAME_LOSS:
+	case GAME_OVER:
 		startButton->render(gRenderer);
 		break;
 	default:
@@ -196,17 +210,20 @@ void update()
 			{
 			case 1:
 				globalAudio->playSound(1);
-				currentState = GAME_LOSS;
+				currentState = GAME_OVER;
 				startButton->setText("Play Again");
 				startButton->setHovered(false);
 				break;
 			case 2:
-				currentState = GAME_WIN;
+				currentState = GAME_OVER;
 				break;
 			}
 		}
+		else {
+			pauseMenu->update(mousePos);
+		}
 		break;
-	case GAME_LOSS:
+	case GAME_OVER:
 		startButton->update(mousePos);
 		break;
 	}
@@ -245,20 +262,34 @@ int main(int argc, char* args[])
 					switch (e.key.keysym.sym)
 					{
 					case SDLK_d:
-						snakeGame->setSnakeDirection(RIGHT);
+						if (currentState == IN_GAME && !paused) {
+							snakeGame->setSnakeDirection(RIGHT);
+						}
 						break;
 					case SDLK_w:
-						snakeGame->setSnakeDirection(UP);
+						if (currentState == IN_GAME && !paused) {
+							snakeGame->setSnakeDirection(UP);
+						}
 						break;
 					case SDLK_a:
-						snakeGame->setSnakeDirection(LEFT);
+						if (currentState == IN_GAME && !paused) {
+							snakeGame->setSnakeDirection(LEFT);
+						}
 						break;
 					case SDLK_s:
-						snakeGame->setSnakeDirection(DOWN);
+						if (currentState == IN_GAME && !paused) {
+							snakeGame->setSnakeDirection(DOWN);
+						}
 						break;
 					case SDLK_ESCAPE:
 						if (currentState == IN_GAME) {
 							paused = paused == false;
+							if (paused) {
+								globalAudio->playSound(2);
+							}
+							else {
+								globalAudio->playSound(3);
+							}
 						}
 						break;
 					}
@@ -267,11 +298,38 @@ int main(int argc, char* args[])
 					switch (e.button.button)
 					{
 					case SDL_BUTTON_LEFT:
-						if (startButton->isIn(mousePos))
+						switch (currentState) {
+						case MAIN_MENU:
+							if (startButton->isIn(mousePos))
+							{
+								globalAudio->playSound(0);
+								snakeGame->reset();
+								currentState = IN_GAME;
+							}
+							break;
+						case IN_GAME:
 						{
-							globalAudio->playSound(0);
-							snakeGame->reset();
-							currentState = IN_GAME;
+							int clickedButton = pauseMenu->isIn(mousePos);
+							switch (clickedButton) {
+							case 0:
+								paused = false;
+								break;
+							case 1:
+								paused = false;
+								currentState = MAIN_MENU;
+								globalAudio->playSound(0);
+								break;
+							}
+							break;
+						}
+						case GAME_OVER:
+							if (startButton->isIn(mousePos))
+							{
+								globalAudio->playSound(0);
+								snakeGame->reset();
+								currentState = IN_GAME;
+							}
+							break;
 						}
 						break;
 					}
