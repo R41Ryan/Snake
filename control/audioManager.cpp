@@ -1,6 +1,9 @@
 #include "audioManager.h"
 #include <iostream>
 
+bool AudioManager::enableMusic = true;
+bool AudioManager::enableSound = true;
+
 AudioManager::AudioManager()
 {
 	for (int i = 0; i < MAX_SOUNDS; i++)
@@ -44,18 +47,20 @@ void AudioManager::loadSound(const char* sound, int index)
 
 void AudioManager::playSound(int index)
 {
-	if (index < 0 || index >= MAX_SOUNDS)
-	{
-		std::cout << "Error playing sound: index is out of bounds.\n";
-		return;
-	}
-	if (sounds[index] == nullptr)
-	{
-		std::cout << "Error playing sound: sound index is null.\n";
-		return;
-	}
-	if (sounds[index] != nullptr) {
-		AudioEvent newEvent{ index };
-		audioQueue.addItemToEnd(newEvent);
+	if (enableSound) {
+		if (index < 0 || index >= MAX_SOUNDS)
+		{
+			std::cout << "Error playing sound: index is out of bounds.\n";
+			return;
+		}
+		if (sounds[index] == nullptr)
+		{
+			std::cout << "Error playing sound: sound index is null.\n";
+			return;
+		}
+		if (sounds[index] != nullptr) {
+			AudioEvent newEvent{ index };
+			audioQueue.addItemToEnd(newEvent);
+		}
 	}
 }

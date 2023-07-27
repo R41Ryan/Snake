@@ -48,8 +48,9 @@ AudioManager* globalAudio;
 SnakeGame* snakeGame;
 int gameScore;
 
-ButtonUI* startButton;
+Menu* mainMenu;
 Menu* pauseMenu;
+Menu* gameOverMenu;
 
 bool init()
 {
@@ -101,16 +102,29 @@ bool init()
 
 	snakeGame = new SnakeGame(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT);
 
-	startButton = new ButtonUI(Coordinates(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), "Start Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
-	startButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	mainMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 3 / 4);
+	ButtonUI* mainMenuButton = new ButtonUI(Coordinates(SCREEN_WIDTH/2, SCREEN_HEIGHT/2), "Start Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	mainMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	mainMenu->addButton(mainMenuButton);
+	mainMenuButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Sound On", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	mainMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	mainMenu->addButton(mainMenuButton);
 
 	pauseMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	ButtonUI* pauseMenuButton = new ButtonUI(Coordinates(), "Resume", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	pauseMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
 	pauseMenu->addButton(pauseMenuButton);
+	pauseMenuButton = new ButtonUI(Coordinates(), "Sound On", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	pauseMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	pauseMenu->addButton(pauseMenuButton);
 	pauseMenuButton = new ButtonUI(Coordinates(), "Return to Menu", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	pauseMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
 	pauseMenu->addButton(pauseMenuButton);
+
+	gameOverMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 3 / 4);
+	ButtonUI* gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Play Again", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	gameOverButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	gameOverMenu->addButton(gameOverButton);
 
 	return true;
 }
@@ -176,7 +190,7 @@ void render()
 	switch (currentState)
 	{
 	case MAIN_MENU:
-		startButton->render(gRenderer);
+		mainMenu->render(gRenderer);
 		break;
 	case IN_GAME:
 		snakeGame->render(gRenderer);
@@ -186,7 +200,7 @@ void render()
 		}
 		break;
 	case GAME_OVER:
-		startButton->render(gRenderer);
+		gameOverMenu->render(gRenderer);
 		break;
 	default:
 		break;
@@ -200,7 +214,7 @@ void update()
 	switch (currentState) 
 	{
 	case MAIN_MENU:
-		startButton->update(mousePos);
+		mainMenu->update(mousePos);
 		break;
 	case IN_GAME:
 		if (!paused) {
@@ -211,8 +225,6 @@ void update()
 			case 1:
 				globalAudio->playSound(1);
 				currentState = GAME_OVER;
-				startButton->setText("Play Again");
-				startButton->setHovered(false);
 				break;
 			case 2:
 				currentState = GAME_OVER;
@@ -224,7 +236,7 @@ void update()
 		}
 		break;
 	case GAME_OVER:
-		startButton->update(mousePos);
+		gameOverMenu->update(mousePos);
 		break;
 	}
 }
@@ -300,13 +312,29 @@ int main(int argc, char* args[])
 					case SDL_BUTTON_LEFT:
 						switch (currentState) {
 						case MAIN_MENU:
-							if (startButton->isIn(mousePos))
-							{
-								globalAudio->playSound(0);
+						{
+							int clickedButton = mainMenu->isIn(mousePos);
+							switch (clickedButton) {
+							case 0:
 								snakeGame->reset();
 								currentState = IN_GAME;
+								globalAudio->playSound(0);
+								break;
+							case 1:
+								AudioManager::setEnableSound(AudioManager::getEnableSound() == false);
+								globalAudio->playSound(0);
+								if (AudioManager::getEnableSound()) {
+									mainMenu->getButtons()[1]->setText("Sound On");
+									pauseMenu->getButtons()[1]->setText("Sound On");
+								}
+								else {
+									mainMenu->getButtons()[1]->setText("Sound Off");
+									pauseMenu->getButtons()[1]->setText("Sound Off");
+								}
+								break;
 							}
 							break;
+						}
 						case IN_GAME:
 						{
 							int clickedButton = pauseMenu->isIn(mousePos);
@@ -315,6 +343,19 @@ int main(int argc, char* args[])
 								paused = false;
 								break;
 							case 1:
+								AudioManager::setEnableSound(AudioManager::getEnableSound() == false);
+								globalAudio->playSound(0);
+								pauseMenu->getButtons()[1]->setText("Sound off");
+								if (AudioManager::getEnableSound()) {
+									mainMenu->getButtons()[1]->setText("Sound On");
+									pauseMenu->getButtons()[1]->setText("Sound On");
+								}
+								else {
+									mainMenu->getButtons()[1]->setText("Sound Off");
+									pauseMenu->getButtons()[1]->setText("Sound Off");
+								}
+								break;
+							case 2:
 								paused = false;
 								currentState = MAIN_MENU;
 								globalAudio->playSound(0);
@@ -323,13 +364,17 @@ int main(int argc, char* args[])
 							break;
 						}
 						case GAME_OVER:
-							if (startButton->isIn(mousePos))
-							{
+						{
+							int clickedButton = pauseMenu->isIn(mousePos);
+							switch (clickedButton) {
+							case 0:
 								globalAudio->playSound(0);
 								snakeGame->reset();
 								currentState = IN_GAME;
+								break;
 							}
 							break;
+						}
 						}
 						break;
 					}

@@ -21,7 +21,8 @@ public:
 	void reset();
 
 	void addButton(ButtonUI* button);
-	void repositionButtons();
+	// Moves and resizes the buttons as appropriate
+	void adjustButtons();
 	// Returns the index of the button that the mouseCoordinate is in
 	int isIn(Coordinates mousePosition);
 

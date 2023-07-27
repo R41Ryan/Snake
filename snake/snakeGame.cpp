@@ -87,7 +87,6 @@ void SnakeGame::nextFrame(int& flags)
 		flags = 1;
 
 	if (snakePlayer->getHead() == apple->getLocation()) {
-		audio->playSound(1);
 		snakePlayer->addBody(width, height);
 		do {
 			apple->newLocation(width, height);
@@ -97,6 +96,9 @@ void SnakeGame::nextFrame(int& flags)
 
 		if (score % 10 == 0) {
 			audio->playSound(2);
+		}
+		else {
+			audio->playSound(1);
 		}
 	}
 

@@ -35,7 +35,7 @@ void Menu::render(SDL_Renderer* renderer)
 	SDL_RenderDrawRect(renderer, &renderRect);
 
 	// Render the menu buttons, re-adjusting their position as needed
-	repositionButtons();
+	adjustButtons();
 	for (int i = 0; i < buttons.size(); i++) {
 		buttons[i]->render(renderer);
 	}
@@ -43,21 +43,27 @@ void Menu::render(SDL_Renderer* renderer)
 
 void Menu::reset()
 {
+	for (int i = 0; i < buttons.size(); i++) {
+		buttons[i]->setHovered(false);
+	}
 }
 
 void Menu::addButton(ButtonUI* button)
 {
 	buttons.push_back(button);
-	repositionButtons();
+	adjustButtons();
 }
 
-void Menu::repositionButtons()
+void Menu::adjustButtons()
 {
 	int count = buttons.size();
 	int verticalSpacing = size.b / (count + 1);
 	for (int i = 0; i < count; i++) {
 		Vector2D<int> buttonSize = buttons[i]->getSize();
 		buttons[i]->setPosition(Coordinates(position.x, position.y - size.a / 2 + (i + 1) * verticalSpacing));
+	}
+	for (int i = 0; i < count; i++) {
+		buttons[i]->setSize(Vector2D<int>(size.a / 2, size.b / count - verticalSpacing * 3 / 4));
 	}
 }
 
