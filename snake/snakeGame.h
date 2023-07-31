@@ -6,6 +6,8 @@
 #include <math.h>
 #include <control/control.h>
 
+#define MILLI_PER_FRAME 100
+
 class SnakeGame {
 	int width;
 	int height;
@@ -15,9 +17,10 @@ class SnakeGame {
 	int length;
 	Snake* snakePlayer;
 	Apple* apple;
+	bool canChangeDirection;
 
 	AudioManager* audio;
-
+	Timer* gameTimer;
 	bool running;
 
 	float getDistance(float x1, float y1, float x2, float y2);

@@ -21,11 +21,14 @@ SnakeGame::SnakeGame(int screenWidth, int screenHeight, int w, int h)
 	apple = new Apple(rand() % (width - 1), rand() & (height - 1));
 	score = 0;
 	length = 0;
+	canChangeDirection = true;
 
 	audio = new AudioManager();
 	audio->loadSound("audio\\snake_turn.wav", 0);
 	audio->loadSound("audio\\pick_apple.wav", 1);
 	audio->loadSound("audio\\milestone.wav", 2);
+
+	gameTimer = new Timer(MILLI_PER_FRAME);
 
 	running = true;
 }
@@ -77,69 +80,84 @@ void SnakeGame::nextFrame(int& flags)
 
 	flags = 0;
 
-	snakePlayer->move();
+	bool timerEnded = gameTimer->update();
 
-	if (snakePlayer->getHead().x > width || snakePlayer->getHead().x < 0)
-		flags = 1;
-	if (snakePlayer->getHead().y > height || snakePlayer->getHead().y < 0)
-		flags = 1;
-	if (snakePlayer->checkSnakeCollision())
-		flags = 1;
+	if (timerEnded) {
+		canChangeDirection = true;
 
-	if (snakePlayer->getHead() == apple->getLocation()) {
-		snakePlayer->addBody(width, height);
-		do {
-			apple->newLocation(width, height);
-		} while (snakePlayer->checkBodyCoordinates(apple->getLocation()));
-		score ++;
-		length++;
+		snakePlayer->move();
 
-		if (score % 10 == 0) {
-			audio->playSound(2);
+		if (snakePlayer->getHead().x > width || snakePlayer->getHead().x < 0)
+			flags = 1;
+		if (snakePlayer->getHead().y > height || snakePlayer->getHead().y < 0)
+			flags = 1;
+		if (snakePlayer->checkSnakeCollision())
+			flags = 1;
+
+		if (snakePlayer->getHead() == apple->getLocation()) {
+			snakePlayer->addBody(width, height);
+			do {
+				apple->newLocation(width, height);
+			} while (snakePlayer->checkBodyCoordinates(apple->getLocation()));
+			score++;
+			length++;
+
+			if (score % 10 == 0) {
+				audio->playSound(2);
+			}
+			else {
+				audio->playSound(1);
+			}
 		}
-		else {
-			audio->playSound(1);
+
+		if (snakePlayer->getBody().size() == (width * height) - 1)
+			flags = 2;
+
+		if (flags == 1 || flags == 2)
+		{
+			running = false;
 		}
 	}
-
-	if (snakePlayer->getBody().size() == (width * height) - 1)
-		flags = 2;
-
-	if (flags == 1 || flags == 2)
-	{
-		running = false;
+	else if (!gameTimer->isRunning()) {
+		gameTimer->start();
 	}
 }
 
 void SnakeGame::setSnakeDirection(int d)
 {
 	bool playSound = true;
-	switch (d)
-	{
-	case RIGHT:
-		if (snakePlayer->getDirection() == LEFT) {
-			playSound = false;
-			d = LEFT;
+
+	if (canChangeDirection) {
+		switch (d)
+		{
+		case RIGHT:
+			if (snakePlayer->getDirection() == LEFT) {
+				playSound = false;
+				d = LEFT;
+			}
+			break;
+		case UP:
+			if (snakePlayer->getDirection() == DOWN) {
+				playSound = false;
+				d = DOWN;
+			}
+			break;
+		case LEFT:
+			if (snakePlayer->getDirection() == RIGHT) {
+				playSound = false;
+				d = RIGHT;
+			}
+			break;
+		case DOWN:
+			if (snakePlayer->getDirection() == UP) {
+				playSound = false;
+				d = UP;
+			}
+			break;
 		}
-		break;
-	case UP:
-		if (snakePlayer->getDirection() == DOWN) {
-			playSound = false;
-			d = DOWN;
-		}
-		break;
-	case LEFT:
-		if (snakePlayer->getDirection() == RIGHT) {
-			playSound = false;
-			d = RIGHT;
-		}
-		break;
-	case DOWN:
-		if (snakePlayer->getDirection() == UP) {
-			playSound = false;
-			d = UP;
-		}
-		break;
+	}
+	else {
+		playSound = false;
 	}
 
 	if (snakePlayer->getDirection() == d)
@@ -147,7 +165,10 @@ void SnakeGame::setSnakeDirection(int d)
 
 	if (playSound)
 		audio->playSound(0);
-	snakePlayer->setDirection(d);
+	if (canChangeDirection) {
+		snakePlayer->setDirection(d);
+		canChangeDirection = false;
+	}
 }
 
 void SnakeGame::reset()

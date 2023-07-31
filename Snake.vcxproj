@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="control\control.h" />
+    <ClInclude Include="control\timer.h" />
     <ClInclude Include="dataStructures.h" />
     <ClInclude Include="snake\apple.h" />
     <ClInclude Include="snake\snake.h" />
@@ -30,6 +31,7 @@
   <ItemGroup>
     <ClCompile Include="control\audioManager.cpp" />
     <ClCompile Include="control\audioManager.h" />
+    <ClCompile Include="control\timer.cpp" />
     <ClCompile Include="mySnakeGame.cpp" />
     <ClCompile Include="snake\apple.cpp" />
     <ClCompile Include="snake\snake.cpp" />

@@ -9,7 +9,7 @@
 #include "ui/ui.h"
 #include "control/control.h"
 
-#define FPS 20
+#define FPS 30
 #define GLOBAL_SOUNDS_NUM 10
 
 enum gameStates
