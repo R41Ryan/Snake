@@ -109,6 +109,9 @@ bool init()
 	mainMenuButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Sound On", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	mainMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
 	mainMenu->addButton(mainMenuButton);
+	mainMenuButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Exit Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	mainMenuButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	mainMenu->addButton(mainMenuButton);
 
 	pauseMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	ButtonUI* pauseMenuButton = new ButtonUI(Coordinates(), "Resume", Vector2D<int>(200, 100), "Arial.ttf", 15);
@@ -123,6 +126,9 @@ bool init()
 
 	gameOverMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 3 / 4);
 	ButtonUI* gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Play Again", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	gameOverButton->getAudio()->loadSound("audio\\hover.wav", 0);
+	gameOverMenu->addButton(gameOverButton);
+	gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Exit Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	gameOverButton->getAudio()->loadSound("audio\\hover.wav", 0);
 	gameOverMenu->addButton(gameOverButton);
 
@@ -332,6 +338,9 @@ int main(int argc, char* args[])
 									pauseMenu->getButtons()[1]->setText("Sound Off");
 								}
 								break;
+							case 2:
+								currentState = QUITTING_GAME;
+								break;
 							}
 							break;
 						}
@@ -365,12 +374,15 @@ int main(int argc, char* args[])
 						}
 						case GAME_OVER:
 						{
-							int clickedButton = pauseMenu->isIn(mousePos);
+							int clickedButton = gameOverMenu->isIn(mousePos);
 							switch (clickedButton) {
 							case 0:
 								globalAudio->playSound(0);
 								snakeGame->reset();
 								currentState = IN_GAME;
+								break;
+							case 1:
+								currentState = QUITTING_GAME;
 								break;
 							}
 							break;
