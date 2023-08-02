@@ -51,6 +51,15 @@
     <ClInclude Include="control\timer.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
+    <ClInclude Include="ui\textbox.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\uiComponent.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\uiTextComponent.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="snake\apple.cpp">
@@ -82,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="control\timer.cpp">
       <Filter>Source Files\control</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\textbox.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

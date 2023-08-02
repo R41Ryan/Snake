@@ -26,7 +26,10 @@
     <ClInclude Include="snake\snake.h" />
     <ClInclude Include="snake\snakeGame.h" />
     <ClInclude Include="ui\menu.h" />
+    <ClInclude Include="ui\textbox.h" />
     <ClInclude Include="ui\ui.h" />
+    <ClInclude Include="ui\uiComponent.h" />
+    <ClInclude Include="ui\uiTextComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="control\audioManager.cpp" />
@@ -39,6 +42,7 @@
     <ClCompile Include="ui\buttonUI.cpp" />
     <ClCompile Include="ui\buttonUI.h" />
     <ClCompile Include="ui\menu.cpp" />
+    <ClCompile Include="ui\textbox.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
