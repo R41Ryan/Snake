@@ -28,8 +28,8 @@ public:
 		Vector3D<int> bc = Vector3D<int>(0xff, 0xff, 0xff), Vector3D<int> hc = Vector3D<int>(0x88, 0x88, 0x88), bool f = true);
 	~ButtonUI();
 
-	void update(Coordinates mousePos);
-	void render(SDL_Renderer* renderer);
+	virtual void update(Coordinates mousePos);
+	virtual void render(SDL_Renderer* renderer);
 	bool isIn(Coordinates pos);
 	// Checks if the mouse coordinates hover over the mouse and changes hovered as appropriate.
 	// Returns a bool for if there was a change of state in hovered.

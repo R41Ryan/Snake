@@ -54,12 +54,6 @@
     <ClInclude Include="ui\textbox.h">
       <Filter>Header Files\ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\uiComponent.h">
-      <Filter>Header Files\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\uiTextComponent.h">
-      <Filter>Header Files\ui</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="snake\apple.cpp">

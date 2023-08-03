@@ -28,8 +28,6 @@
     <ClInclude Include="ui\menu.h" />
     <ClInclude Include="ui\textbox.h" />
     <ClInclude Include="ui\ui.h" />
-    <ClInclude Include="ui\uiComponent.h" />
-    <ClInclude Include="ui\uiTextComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="control\audioManager.cpp" />
