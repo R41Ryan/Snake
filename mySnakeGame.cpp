@@ -5,6 +5,7 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <string>
+#include <format>
 #include "snake/snakeGame.h"
 #include "ui/ui.h"
 #include "control/control.h"
@@ -125,7 +126,10 @@ bool init()
 	pauseMenu->addButton(pauseMenuButton);
 
 	gameOverMenu = new Menu(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH * 3 / 4, SCREEN_HEIGHT * 3 / 4);
-	ButtonUI* gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Play Again", Vector2D<int>(200, 100), "Arial.ttf", 15);
+	ButtonUI* gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Score: ", Vector2D<int>(200, 100), "Arial.ttf", 15,
+		false, Vector3D<int>(255, 255, 255));
+	gameOverMenu->addButton(gameOverButton);
+	gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Play Again", Vector2D<int>(200, 100), "Arial.ttf", 15);
 	gameOverButton->getAudio()->loadSound("audio\\hover.wav", 0);
 	gameOverMenu->addButton(gameOverButton);
 	gameOverButton = new ButtonUI(Coordinates(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), "Exit Game", Vector2D<int>(200, 100), "Arial.ttf", 15);
@@ -231,9 +235,11 @@ void update()
 			case 1:
 				globalAudio->playSound(1);
 				currentState = GAME_OVER;
+				gameOverMenu->getButtons()[0]->setText(std::string("Score: ").append(std::to_string(snakeGame->getScore())));
 				break;
 			case 2:
-				currentState = GAME_OVER;
+				currentState = GAME_OVER; 
+				gameOverMenu->getButtons()[0]->setText(std::string("Score: ").append(std::to_string(snakeGame->getScore())));
 				break;
 			}
 		}
@@ -376,12 +382,12 @@ int main(int argc, char* args[])
 						{
 							int clickedButton = gameOverMenu->isIn(mousePos);
 							switch (clickedButton) {
-							case 0:
+							case 1:
 								globalAudio->playSound(0);
 								snakeGame->reset();
 								currentState = IN_GAME;
 								break;
-							case 1:
+							case 2:
 								currentState = QUITTING_GAME;
 								break;
 							}

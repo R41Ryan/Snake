@@ -1,8 +1,8 @@
 #include "buttonUI.h"
 #include <iostream>
 
-ButtonUI::ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fontFileName, int fs, 
-	Vector3D<int> tc, Vector3D<int> oc, Vector3D<int> bc, Vector3D<int> hc, bool f) : UITextComponent(p, s, t, fontFileName, fs, tc)
+ButtonUI::ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fontFileName, int fs, bool f,
+	Vector3D<int> tc, Vector3D<int> oc, Vector3D<int> bc, Vector3D<int> hc)
 {
 	position = p;
 	text = t;

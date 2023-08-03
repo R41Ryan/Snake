@@ -24,8 +24,8 @@ class ButtonUI {
 
 public:
 	ButtonUI(Coordinates p, std::string t, Vector2D<int> s, const char* fontFileName, 
-		int fs = 10, Vector3D<int> tc = Vector3D<int>(0, 0, 0), Vector3D<int> oc = Vector3D<int>(0xff, 0xff, 0xff),
-		Vector3D<int> bc = Vector3D<int>(0xff, 0xff, 0xff), Vector3D<int> hc = Vector3D<int>(0x88, 0x88, 0x88), bool f = true);
+		int fs = 10, bool f = true, Vector3D<int> tc = Vector3D<int>(0, 0, 0), Vector3D<int> oc = Vector3D<int>(0xff, 0xff, 0xff),
+		Vector3D<int> bc = Vector3D<int>(0xff, 0xff, 0xff), Vector3D<int> hc = Vector3D<int>(0x88, 0x88, 0x88));
 	~ButtonUI();
 
 	virtual void update(Coordinates mousePos);
