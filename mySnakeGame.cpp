@@ -66,7 +66,7 @@ bool init()
 		std::cout << "Warning: Linear texture filtering is not enabled." << std::endl;
 	}
 
-	gWindow = SDL_CreateWindow("Snake Reinforcment Learning", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+	gWindow = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL)
 	{
